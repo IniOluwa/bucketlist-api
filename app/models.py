@@ -22,7 +22,7 @@ class Base(db.Models):
 class User(Base):
     __tablename__ = 'user'
     username = db.Column(db.String(64), unique=True, index=True)
-    # password = 
+    # password =
     user_bucketlists = db.relationship('BucketList', lazy='immediate')
 
     def __repr__(self):
