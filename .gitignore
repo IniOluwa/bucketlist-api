@@ -1,0 +1,5 @@
+# Python compiled scripts
+*py[cod]
+
+# Databases
+*.sqlite
