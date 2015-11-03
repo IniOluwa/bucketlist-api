@@ -1,15 +1,10 @@
 from . import main
 from ..models import User
 from ..import db
-from flask import request, jsonify, abort, url_for, g
+from flask import request, jsonify, abort, url_for, g, session
 from datetime import datetime
 from flask.ext.httpauth import HTTPBasicAuth
 auth = HTTPBasicAuth()
-
-
-@main.route('/', methods=['GET', 'POST'])
-def hello():
-    return "It is working"
 
 
 # New user creation
@@ -35,6 +30,7 @@ def new_user():
         }), 201
 
 
+# get user
 @main.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
@@ -43,14 +39,14 @@ def get_user(id):
     return jsonify(user.to_json())
 
 
+# user login
 @main.route('/auth/login', methods=['POST'])
 def login_user():
     username = request.json.get('username')
     password = request.json.get('password')
-
     if verify_password(username, password):
         user = User.query.filter_by(username=username).first()
-        token = user.generate_auth_token(3600)
+        token = user.generate_auth_toszken(3600)
         return jsonify({
             'user': username,
             'token': token.decode('ascii'),
@@ -60,9 +56,13 @@ def login_user():
         return "Invalid username or password"
 
 
+# user logout
 @main.route('/auth/logout', methods=['GET'])
+@auth.login_required
 def logout_user():
-    pass
+    return jsonify({
+        'status': 'Logged out'
+    })
 
 
 # password and token authentication

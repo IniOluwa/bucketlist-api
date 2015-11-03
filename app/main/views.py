@@ -5,13 +5,8 @@ from flask import request, jsonify, abort, g
 from .authentication import auth
 
 
-@main.route('/', methods=['GET', 'POST'])
-def index():
-    return "The app works!"
-
-
-@auth.login_required
 @main.route('/bucketlists/', methods=['GET', 'POST'])
+@auth.login_required
 def create_and_get_bucketlists():
     if request.method == 'POST':
         name = request.json.get('name')
@@ -25,6 +20,7 @@ def create_and_get_bucketlists():
 
 
 @main.route('/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
+@auth.login_required
 def get_edit_delete_bucketlist(id):
     bucketlist = BucketList.query.get(id)
     if request.method == 'GET':
@@ -48,6 +44,7 @@ def get_edit_delete_bucketlist(id):
 
 
 @main.route('/bucketlists/<int:id>/items', methods=['POST'])
+@auth.login_required
 def create_bucketlistitem(id):
     name = request.json.get('name')
     item = BucketListItem(name=name)
@@ -59,6 +56,7 @@ def create_bucketlistitem(id):
 
 
 @main.route('/bucketlists/<id>/items/<int:item_id>', methods=['PUT', 'DELETE'])
+@auth.login_required
 def edit_delete_bucketlistitem(id, item_id):
     bucketlistitem = BucketListItem.query.get(item_id)
     if request.method == 'PUT':
