@@ -77,7 +77,7 @@ class BucketList(Base):
             'items': items,
             'date_created': self.date_created,
             'date_modified': self.date_modified,
-            'user_id': self.user_id
+            'owner': self.created_by
         }
 
 
@@ -94,5 +94,5 @@ class BucketListItem(Base):
             'name': self.name,
             'date_created': self.date_created,
             'date_modified': self.date_modified,
-            'done': self.done
+            'done': False
         }

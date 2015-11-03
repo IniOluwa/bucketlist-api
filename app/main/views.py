@@ -12,7 +12,7 @@ def create_and_get_bucketlists():
         name = request.json.get('name')
         if name is None:
             abort(400)
-        bucketlist = BucketList(name=name)
+        bucketlist = BucketList(name=name, created_by=g.user.username)
         bucketlist.save()
         return jsonify(bucketlist.to_json())
     # elif request == 'POST':
@@ -46,13 +46,14 @@ def get_edit_delete_bucketlist(id):
 @main.route('/bucketlists/<int:id>/items', methods=['POST'])
 @auth.login_required
 def create_bucketlistitem(id):
-    name = request.json.get('name')
-    item = BucketListItem(name=name)
-    item.save()
-    return jsonify({
-        'item': item.to_json(),
-        'message': 'Bucket list item has been successfully created'
-    })
+    if request.method == 'POST':
+        name = request.json.get('name')
+        item = BucketListItem(name=name)
+        item.save()
+        return jsonify({
+            'item': item.to_json(),
+            'message': 'Bucket list item has been successfully created'
+        })
 
 
 @main.route('/bucketlists/<id>/items/<int:item_id>', methods=['PUT', 'DELETE'])
@@ -61,7 +62,6 @@ def edit_delete_bucketlistitem(id, item_id):
     bucketlistitem = BucketListItem.query.get(item_id)
     if request.method == 'PUT':
         name = request.json.get('name')
-        bucketlistitem.done = True
         bucketlistitem.edit(name)
         bucketlistitem.save()
         return jsonify({

@@ -1,7 +1,7 @@
 from . import main
 from ..models import User
 from ..import db
-from flask import request, jsonify, abort, url_for, g, session
+from flask import request, jsonify, abort, url_for, g
 from datetime import datetime
 from flask.ext.httpauth import HTTPBasicAuth
 auth = HTTPBasicAuth()
@@ -30,7 +30,7 @@ def new_user():
         }), 201
 
 
-# get user
+# get registered users
 @main.route('/users/<int:id>', methods=['GET'])
 def get_user(id):
     user = User.query.get(id)
