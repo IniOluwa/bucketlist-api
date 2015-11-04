@@ -1,13 +1,21 @@
+"""
+Views file handling bucketlist operations
+"""
+# Dependencies importation for views
 from . import main
 from ..models import BucketList, BucketListItem
 from flask import request, jsonify, abort, g, url_for
 from .authentication import auth
 
-
+# Route for creating and getting bucketlists
 @main.route('/bucketlists/', methods=['GET', 'POST'])
 @auth.login_required
 def create_and_get_bucketlists():
+    """
+    Method for creating and getting bucketlists
+    """
     if request.method == 'POST':
+        # creation of a new bucketlist
         name = request.json.get('name')
         if name is None:
             abort(400)
@@ -17,6 +25,7 @@ def create_and_get_bucketlists():
         return jsonify(bucketlist.to_json())
 
     elif request.method == 'GET':
+        # Bucketlists pagination
         bucketlists = BucketList.query.filter_by(author=g.user)
         page = request.args.get('page', 1, type=int)
         page_max = request.args.get('limit', 20, type=int)
@@ -44,11 +53,16 @@ def create_and_get_bucketlists():
         })
 
 
+# Route for getting bucketlists by id
 @main.route('/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
 @auth.login_required
 def get_edit_delete_bucketlist(id):
+    """
+    Method for getting, editing and deleting bucketlists
+    """
     bucketlist = BucketList.query.get(id)
     if request.method == 'GET':
+        # Getting bucketlist by id
         if bucketlist is None:
             return jsonify({
                 'message': 'This bucketlist is not available.'
@@ -56,21 +70,26 @@ def get_edit_delete_bucketlist(id):
         return jsonify(bucketlist.to_json())
 
     elif request.method == 'PUT':
+        # Editing bucketlist
         name = request.json.get('name')
         bucketlist.edit(name)
         bucketlist.save()
         return jsonify(bucketlist.to_json()), 201
 
     elif request.method == 'DELETE':
+        # Deleting bucketlists
         bucketlist.delete()
         return jsonify({
             'message': 'The Bucketlist has been successfully deleted.'
         })
 
-
+# Route for creating bucketlistitem
 @main.route('/bucketlists/<int:id>/items', methods=['POST'])
 @auth.login_required
 def create_bucketlistitem(id):
+    """
+    Method for creating new bucketlist item
+    """
     if request.method == 'POST':
         bucketlist = BucketList.query.get(id)
         name = request.json.get('name')
@@ -84,11 +103,16 @@ def create_bucketlistitem(id):
         })
 
 
+# Route for editing and deleting bucketlistitem
 @main.route('/bucketlists/<int:id>/items/<int:item_id>', methods=['PUT', 'DELETE'])
 @auth.login_required
 def edit_delete_bucketlistitem(id, item_id):
+    """
+    Method for editing and deleting bucketlist item
+    """
     bucketlistitem = BucketListItem.query.get(item_id)
     if request.method == 'PUT':
+        # Edit bucketlist item
         name = request.json.get('name')
         bucketlistitem.edit(name)
         bucketlistitem.save()
@@ -97,6 +121,7 @@ def edit_delete_bucketlistitem(id, item_id):
             'message': 'Bucket list item has been successfully changed'
         })
     elif request.method == 'DELETE':
+        # Deletebucketlist item
         bucketlistitem.delete()
         return jsonify({
             'message': 'The Bucket list item has been successfully deleted.'
