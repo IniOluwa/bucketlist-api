@@ -13,16 +13,15 @@ def new_user():
     username = request.json.get('username')
     password = request.json.get('password')
     if username is None or password is None:
-        # Missing arguements
+        # if usename is missing
         abort(400)
     if User.query.filter_by(username=username).first() is not None:
-        # User already exists
+        # if user already exists
         abort(400)
     user = User(username=username)
     user.hash_password(password)
     user.date_created = datetime.now()
-    db.session.add(user)
-    db.session.commit()
+    user.save()
     return jsonify(
         {
             'username': user.username,
