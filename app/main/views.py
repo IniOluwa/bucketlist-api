@@ -17,27 +17,26 @@ def create_and_get_bucketlists():
         return jsonify(bucketlist.to_json())
 
     elif request.method == 'GET':
-        # import pdb; pdb.set_trace()
-
         bucketlists = BucketList.query.filter_by(author=g.user)
-
         page = request.args.get('page', 1, type=int)
         page_max = request.args.get('limit', 20, type=int)
-        
         q = request.args.get('q', type=str)
         if q:
-            bucketlists = bucketlists.filter(BucketList.name.ilike('%{0}%'.format(q)))
+            bucketlists = bucketlists.filter(
+                BucketList.name.ilike('%{0}%'.format(q)))
 
         pagination = bucketlists.paginate(page, page_max, False)
         pages = pagination.items
 
         prev_page = None
         if pagination.has_prev:
-            prev_page = url_for( 'main.create_and_get_bucketlists', page=page-1, _external=True)
+            prev_page = url_for(
+                'main.create_and_get_bucketlists', page=page - 1, _external=True)
 
         next_page = None
         if pagination.has_next:
-            next_page = url_for( 'main.create_and_get_bucketlists', page=page+1, _external=True)
+            next_page = url_for(
+                'main.create_and_get_bucketlists', page=page + 1, _external=True)
         return jsonify({
             'bucketlist': [page_object.to_json() for page_object in pages],
             'previous': prev_page,
