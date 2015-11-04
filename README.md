@@ -1,4 +1,4 @@
-# Bucketlist-API https://travis-ci.org/andela-ifageyinbo/bucketlist-api.svg?branch=master [![Coverage Status](https://coveralls.io/repos/andela-ifageyinbo/bucketlist-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/andela-ifageyinbo/bucketlist-api?branch=master)
+# Bucketlist-API [![Build Status](https://travis-ci.org/andela-ifageyinbo/bucketlist-api.svg?branch=master)](https://travis-ci.org/andela-ifageyinbo/bucketlist-api) [![Coverage Status](https://coveralls.io/repos/andela-ifageyinbo/bucketlist-api/badge.svg?branch=master&service=github)](https://coveralls.io/github/andela-ifageyinbo/bucketlist-api?branch=master)
 
 ## Description
 A Flask API for a bucket list service.
