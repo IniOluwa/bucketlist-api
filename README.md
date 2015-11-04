@@ -4,16 +4,16 @@
 A Flask API for a bucket list service.
 The bucketlist service is a service that allows users to create and manage one o r more bucket lists. Users can have multiple bucket lists and bucket lists can have multiple items.
 This is a RESTful Flask API, it uses a Token Based Authentication system to authenticate users and therefore gives access rights to only registered users.
-The MultiPurpose Internet Mail Extention ```MIME``` type used for the bucket list service is ```application/json```.
+The MultiPurpose Internet Mail Extention `MIME` type used for the bucket list service is `application/json`.
 
 #### Language
-```PYTHON version 2.7```
+`PYTHON version 2.7`
 
 #### Framework
-```FLASK```
+`FLASK.`
 
 #### Database
-```SQLALCHEMY```
+`SQLALCHEMY`
 
 #### Requirements
 alembic==0.8.3
