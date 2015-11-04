@@ -7,6 +7,7 @@ from ..models import BucketList, BucketListItem
 from flask import request, jsonify, abort, g, url_for
 from .authentication import auth
 
+
 # Route for creating and getting bucketlists
 @main.route('/bucketlists/', methods=['GET', 'POST'])
 @auth.login_required
