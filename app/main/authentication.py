@@ -46,7 +46,7 @@ def login_user():
     password = request.json.get('password')
     if verify_password(username, password):
         user = User.query.filter_by(username=username).first()
-        token = user.generate_auth_toszken(3600)
+        token = user.generate_auth_token(3600)
         return jsonify({
             'user': username,
             'token': token.decode('ascii'),

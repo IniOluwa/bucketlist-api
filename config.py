@@ -35,3 +35,5 @@ config = {
 
     'default': DevelopmentConfig
 }
+
+# Pagination

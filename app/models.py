@@ -1,7 +1,7 @@
 from . import db
 from passlib.apps import custom_app_context as password_context
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
-from flask import current_app, g
+from flask import current_app
 from datetime import datetime
 
 
@@ -29,7 +29,7 @@ class User(Base):
     username = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(64))
     user_bucketlists = db.relationship(
-        'BucketList', backref=db.backref('bucketlist', lazy='joined'))
+        'BucketList', backref=db.backref('author', lazy='immediate'))
 
     def hash_password(self, password):
         self.password_hash = password_context.encrypt(password)
@@ -65,7 +65,7 @@ class BucketList(Base):
     __tablename__ = 'bucketlist'
     name = db.Column(db.String(64), unique=True, index=True)
     items = db.relationship(
-        'BucketListItem', backref=db.backref('bucketlistitem', lazy='joined'))
+        'BucketListItem', backref=db.backref('bucketlist', lazy='immediate'))
     date_modified = db.Column(db.DateTime, default=datetime.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
