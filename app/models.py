@@ -6,7 +6,7 @@ from . import db
 from passlib.apps import custom_app_context as password_context
 from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSignature, SignatureExpired
 from flask import current_app
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 # Abstract base model class
@@ -49,24 +49,6 @@ class User(Base):
     # Method for verifying hashed user password
     def verify_password(self, password):
         return password_context.verify(password, self.password_hash)
-
-    # Method for generating user authentication token
-    def generate_auth_token(self, expiration):
-        s = Serializer(current_app.config['SECRET_KEY'],
-                       expires_in=expiration)
-        return s.dumps({'id': self.id})
-
-    # Static Method for User authentication token verification
-    @staticmethod
-    def verify_auth_token(token):
-        s = Serializer(current_app.config['SECRET_KEY'])
-        try:
-            data = s.loads(token)
-        except SignatureExpired:
-            return None
-        except BadSignature:
-            return None
-        return User.query.get(data['id'])
 
     # Method for returning dictionary values of user data
     def to_json(self):

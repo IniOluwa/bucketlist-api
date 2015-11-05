@@ -3,6 +3,7 @@ Configuration file
 This file contains all app Configuration.
 """
 import os
+from datetime import timedelta
 # Base directory path set
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -46,6 +47,5 @@ config = {
     'development': DevelopmentConfig,
     'testing': TestingConfig,
     'production': ProductionConfig,
-
     'default': DevelopmentConfig
 }

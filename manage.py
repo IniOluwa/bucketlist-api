@@ -14,7 +14,6 @@ app = create_app('default')
 manager = Manager(app)
 migrate = Migrate(app, db)
 
-
 # App shell context created
 def make_shell_context():
     return dict(

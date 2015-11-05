@@ -1,6 +1,7 @@
 import unittest
 import json
 
+from base64 import b64encode
 from app import create_app, db
 from flask import current_app
 from app.models import User, BucketList, BucketListItem
@@ -43,10 +44,20 @@ class BucketListAuthenticationTestCase(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
+    def api_headers(self, username, password):
+        return {
+            'Authorization': 'Basic' + b64encode((username + ':' + password).encode('utf-8')).decode('utf-8'),
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        }
+
     def token(self):
         reponse = self.client.post(
             url_for('main.login_user'),
-            headers=self.get
+            headers=self.api_headers('ini', 'luffy'),
+            data=json.dumps({'username': 'ini', 'password': 'password'})
         )
+        token = json.loads(response.data)['token']
+        return token
 
 

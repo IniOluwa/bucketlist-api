@@ -5,12 +5,12 @@ Views file handling bucketlist operations
 from . import main
 from ..models import BucketList, BucketListItem
 from flask import request, jsonify, abort, g, url_for
-from .authentication import auth
+from decorators import requires_auth
 
 
 # Route for creating and getting bucketlists
 @main.route('/bucketlists/', methods=['GET', 'POST'])
-@auth.login_required
+@requires_auth
 def create_and_get_bucketlists():
     """
     Method for creating and getting bucketlists
@@ -56,7 +56,7 @@ def create_and_get_bucketlists():
 
 # Route for getting bucketlists by id
 @main.route('/bucketlists/<int:id>', methods=['GET', 'PUT', 'DELETE'])
-@auth.login_required
+@requires_auth
 def get_edit_delete_bucketlist(id):
     """
     Method for getting, editing and deleting bucketlists
@@ -86,7 +86,7 @@ def get_edit_delete_bucketlist(id):
 
 # Route for creating bucketlistitem
 @main.route('/bucketlists/<int:id>/items', methods=['POST'])
-@auth.login_required
+@requires_auth
 def create_bucketlistitem(id):
     """
     Method for creating new bucketlist item
@@ -106,7 +106,7 @@ def create_bucketlistitem(id):
 
 # Route for editing and deleting bucketlistitem
 @main.route('/bucketlists/<int:id>/items/<int:item_id>', methods=['PUT', 'DELETE'])
-@auth.login_required
+@requires_auth
 def edit_delete_bucketlistitem(id, item_id):
     """
     Method for editing and deleting bucketlist item

@@ -19,6 +19,7 @@ def create_app(config_name):
     # Initialize SQLAlchemy database with flask app
     db.init_app(app)
 
+
     # Flask blueprint importation and initialization for app
     from main import main as main_blueprint
     app.register_blueprint(main_blueprint)
