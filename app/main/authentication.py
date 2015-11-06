@@ -4,11 +4,9 @@ File for user creation and authentication in app
 # Dependencies importation for authentication
 from . import main
 from ..models import User
-from flask import request, jsonify, abort, url_for, g
+from flask import request, jsonify, abort, url_for, g, current_app
 from datetime import datetime
-import jwt
-import base64
-from decorators import requires_auth
+from decor import requires_authentication
 
 
 # User register route for new user creation
@@ -39,6 +37,7 @@ def new_user():
 
 # Get users route for getting users
 @main.route('/users/<int:id>', methods=['GET'])
+@requires_authentication
 def get_user(id):
     """Getting users by id from database"""
     user = User.query.get(id)
@@ -49,43 +48,31 @@ def get_user(id):
 
 # User login route for user login
 @main.route('/auth/login', methods=['POST'])
+@requires_authentication
 def login_user():
     """logging in the user"""
     # getting json data from user
     username = request.json.get('username')
     password = request.json.get('password')
-    # verifying user
-    header = {
-        "alg": "HS256",
-        "typ": "JWT"
-    }
 
-    payload = {
-        "username": username,
-        "password": password,
-        "exp": "3600"
-    }
 
-    token = HMACSHA256(
-        base64UrlEncode(header) + "." +
-        base64UrlEncode(payload),
-        secret
-    )
+    if username is None or password is None:
+        abort(400) 
 
-    return jsonify({
-        "user": username,
-        "token": token,
-        "status": "Logged in"
-    })
-    
-
-    # else:
-    #     return "Invalid username or password"
-
+    user = User.query.filter_by(username=username).first()
+    if user is not None and user.verify_password(password):
+        token = user.generate_auth_token()
+        g.user = user
+        response = {
+            "token": token
+        }
+        return jsonify(response)
+    else:
+        abort(401)
 
 # User logout route for logging out user
 @main.route('/auth/logout', methods=['GET'])
-@requires_auth
+@requires_authentication
 def logout_user():
     """user logout"""
     return jsonify({

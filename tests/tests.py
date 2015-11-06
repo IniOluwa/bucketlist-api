@@ -3,7 +3,7 @@ import json
 
 from base64 import b64encode
 from app import create_app, db
-from flask import current_app
+from flask import current_app, url_for, g
 from app.models import User, BucketList, BucketListItem
 
 
@@ -36,7 +36,6 @@ class BucketListAuthenticationTestCase(unittest.TestCase):
         bucketlistitem = BucketListItem(name=self.bucketlistitem_name, bucketlist_id=bucketlist.id)
         bucketlistitem.save()
 
-
     def tearDown(self):
         """
         Teardown after tests have been executed
@@ -52,12 +51,10 @@ class BucketListAuthenticationTestCase(unittest.TestCase):
         }
 
     def token(self):
-        reponse = self.client.post(
+        response = self.client.post(
             url_for('main.login_user'),
             headers=self.api_headers('ini', 'luffy'),
             data=json.dumps({'username': 'ini', 'password': 'password'})
         )
         token = json.loads(response.data)['token']
         return token
-
-
